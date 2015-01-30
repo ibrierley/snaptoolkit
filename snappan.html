@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Snap.svg Toolkit Test</title>
+</head>
+<body>
+
+
+<link href="toolkitstyle.css" rel="stylesheet">
+
+<script src="snap.svg.js"></script>
+<script src="snaptookit.js"></script>
+<script src="http://hammerjs.github.io/dist/hammer.js"></script>
+
+<div id="outputarea" style="height: 800px;">
+	<svg id="mySvg" height="100%" width="100%"></svg>
+</div>
+
+<script>
+
+var paper = Snap("#mySvg");
+
+var r1 = paper.rect(430,30,50,50,10,10).attr({ fill: 'blue' });
+var t = paper.text(430,20,'click to focus on square').attr({ fontSize: 6 });
+
+var r2 = paper.rect(30,100,50,50,10,10).attr({ fill: 'red' });
+var t2 = paper.text(30,90,"click to focus on tux").attr({ fontSize: 6 });
+
+
+var r = paper.rect(0,0,20,20);
+
+var c = paper.circle(20,20,50).attr({ fill: 'green' });
+
+c.animateFrames([
+    { animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce },
+    { animation: { transform: 't50,500' },                dur: 1000, easing: mina.bounce },
+    { animation: { transform: 's1.2,1.2,300,300t200,-100' },dur: 1000, easing: mina.bounce }
+]); 
+
+var mpath = paper.markupMpath({ "xlink:href": "#path1" });
+var path = paper.path("M200,200L400,400Z").attr({ stroke: "blue", id: "path1", opacity: "0.3" });
+r.markupAnimateMotion( { dur: "5s", fill: "freeze" }, mpath );
+r.markupAnimate( { attributeName: "opacity", from: "1", to: "0", dur: "5s", repeatCount: "indefinite" });
+
+
+var g = paper.g();
+var myImage = paper.image('Dreaming_Tux.svg',-20,-40,400,400);
+
+g.add(myImage);
+
+paper.add(c); // bring to front
+paper.add(r2);
+
+myImage.ftCreateHandles();
+
+r1.click( rectFocus );
+r2.click( function() { 
+	console.log('clicked on r2');
+	myImage.animateSvgFocus( 2000, mina.linear ) 
+} );
+
+function rectFocus() {
+        r1.animateSvgFocus( 2000, mina.linear, imageFocus);
+};
+
+function imageFocus() {
+	console.log('imagefocus');
+	console.log( myImage);
+	g.animateSvgFocus( 2000, mina.linear, logstuff ); 
+};
+
+
+function rect2Focus() {
+	r2.animateSvgFocus( 2000, mina.linear, animateScale);
+};
+
+function animateScale() {
+	Snap.animate(1,2, function( val ) {
+		g.scaleBy( val )
+	}, 2000, mina.linear );
+};
+
+function animateRotate() {
+	Snap.animate(0,90, function( val ) {
+                g.rotateBy( val );
+        }, 2000, mina.linear );
+};
+
+function animateScaleBack() {
+	g.storeInitialTransform();
+	Snap.animate(1,0.5, function( val ) {
+                g.scaleBy( val );
+        }, 2000, mina.linear, animatePan );
+
+}
+
+function animatePan() {
+        g.storeInitialTransform();
+        Snap.animate(0,20, function( val ) {
+                g.panBy( val, val );
+        }, 2000, mina.linear );
+
+}
+
+myImage.addMouseWheelHandler();
+
+var mc = new Hammer( myImage.node, {} );
+var pinch = new Hammer.Pinch();
+var pan = new Hammer.Pan();
+
+mc.add( pinch );
+mc.add( pan );
+       	
+mc.on('pinchstart', function(ev){ 
+	myImage.resetStates( ev );
+} );
+
+mc.on('pinchmove', function(ev) {
+	ev.preventDefault();
+	myImage.pinchMove( ev );
+});
+
+mc.on('pinchend', function(ev) {
+});
+	
+mc.on('panstart', function( ev ) {
+	myImage.onPanStart( ev );
+});
+
+mc.on('panmove', function( ev ) {
+	ev.preventDefault();
+	Snap( ev.target ).panMove( ev );
+});
+
+	
+</script>
+
+</body>
+
+</html>
