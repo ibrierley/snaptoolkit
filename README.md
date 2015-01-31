@@ -24,7 +24,7 @@ c.animateFrames([
 - el.viewBoxZoom(pt, factor ) // zoom the svg, pt is an svg point, ie from createPoint()
 
 - el.getCursorPoint ( x, y ) // get the cursor point and return as svg point accounting for screen matrix inverse
-- 
+
 - el.globalToLocal( globalPoint ) // get transform to point from paper, need to go over and explain this better
 
 - el.zoomCenter( factor ) // zoom into the element as a center (need to add svg zoom as well)
@@ -87,3 +87,34 @@ var mpath = paper.markupMpath({ "xlink:href": "#path1" });
 r.markupAnimateMotion( { dur: "5s", fill: "freeze" }, mpath );
 r.markupAnimate( { attributeName: "opacity", from: "1", to: "0", dur: "5s", repeatCount: "indefinite" });
 ```
+
+Example using with Hammer.js
+
+```
+var mc = new Hammer( myImage.node, {} );
+var pinch = new Hammer.Pinch();
+var pan = new Hammer.Pan();
+mc.add( pinch );
+mc.add( pan );
+mc.on('pinchstart', function(ev){
+        myImage.resetStates( ev );
+} );
+
+mc.on('pinchmove', function(ev) {
+        ev.preventDefault();
+        myImage.pinchMove( ev );
+});
+
+mc.on('pinchend', function(ev) {
+});
+
+mc.on('panstart', function( ev ) {
+        myImage.onPanStart( ev );
+});
+
+mc.on('panmove', function( ev ) {
+        ev.preventDefault();
+        Snap( ev.target ).panMove( ev );
+});
+```
+
