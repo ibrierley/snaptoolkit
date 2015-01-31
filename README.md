@@ -2,7 +2,7 @@
 
 ## A toolkit of stuff relating to Snap.svg
 
-This is less of a release, and more of a toolkit of possible solutions to common problems that appear in Snap that people could use and abuse.
+This is less of a release, and more of a toolkit of possible solutions to common problems that appear in Snap that people could use and abuse and incorporate. I'm not sure I'll have time to ever do a proper release (unless others wanted to help), so its more of a chunk of code to get improved on over time to come up with the most correct way of doing something (as some transform integration is difficult to understand).
 
 Ideas include...
 Snap/pan/zoom example on elements and pan/zoom on svg elements (as you can't transform an svg)
