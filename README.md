@@ -4,6 +4,18 @@
 
 This is less of a release, and more of a toolkit of possible solutions to common problems that appear in Snap that people could use and abuse.
 
+Ideas include...
+Snap/pan/zoom example on elements and pan/zoom on svg elements (as you can't transform an svg)
+Basic freetransform implementation
+Allowing snap/pan/zoom to work with Hammer.js to deal with touch interfaces
+Make animated sequences easier (there is no timeline type thing as yet)
+Allow easier SMIL markup animation
+Rotate/Pan/Zoom immediate and animated
+Add a set of plugins to add extra features to to be written quicker
+
+
+Example at http://svg.dabbles.info/snaptoolkit/snappan.html
+
 ## Methods
 
 - el.animateFrames( arrayOfAnimations ) // sequences of animations in order, using callbacks after each
