@@ -15,6 +15,21 @@ c.animateFrames([
 ]);
 ```
 
+- el.scaleBy( factor ) // scale by an amount
+- el.scaleInc( factor ) // Incrementally rotate by a factor
+- el.rotateBy( angle ) // rotate by angl
+- el.rotateInc( angle ) // incrementally rotate by angle
+- el.panBy( x, y ) // pan by amount
+- el.panInc( x, y ) // incrementally pan by amount
+- el.resetStates() // resets transforms for above
+- el.storeDragStart( x, y ) // store drag start
+- el.getDragStart( x, y ) // get start of drag
+- el.getNewPan() // get a new pan thats going to be applied (not sure if tested)
+- el.getNewPanString // as above but as string ?
+- el.getOriginalViewbox // get the original viewbox before animation
+
+- el.pinchmove( event ) // pinchmove an element
+
 - el.animateFunc( from, to, func, timer, easing, callback ) // animation func that ties into other stuff here, need to doc how this slightly varies from Snaps animate 
 - el.animateSvgFocus( duration, easing, callback ) // animate/highlight the Svg/paper element
 - el.svgFocus() // zoom into the zvg so its centered
