@@ -15,6 +15,24 @@ c.animateFrames([
 ]);
 ```
 
+- el.getEventPoint( event ) // get the event point in elements coordinate space from screen (may need to rephrase)
+- el.getMousePoiunt( ev, x, y ) // get the event accounting for screen/paper/element transform
+- el.getInverseScreenPoint( x, y ) // get the point accounting for screen inverse.
+- el.createPoint( x, y ) // create an svg point, useful for using later in svg transforms
+- el.getViewBox() // getViewbox even if not set (is this duplicate of method below ?)
+
+- el.viewBoxZoom(pt, factor ) // zoom the svg, pt is an svg point, ie from createPoint()
+
+- el.getCursorPoint ( x, y ) // get the cursor point and return as svg point accounting for screen matrix inverse
+- 
+- el.globalToLocal( globalPoint ) // get transform to point from paper, need to go over and explain this better
+
+- el.zoomCenter( factor ) // zoom into the element as a center (need to add svg zoom as well)
+
+- el.elementZoom( svgPoint, factor ) // zoom the element into a point / rephrase
+
+- el.handleScroll( ev ) // handle scrolling
+
 - el.scaleBy( factor ) // scale by an amount
 - el.scaleInc( factor ) // Incrementally rotate by a factor
 - el.rotateBy( angle ) // rotate by angl
@@ -25,10 +43,24 @@ c.animateFrames([
 - el.storeDragStart( x, y ) // store drag start
 - el.getDragStart( x, y ) // get start of drag
 - el.getNewPan() // get a new pan thats going to be applied (not sure if tested)
-- el.getNewPanString // as above but as string ?
-- el.getOriginalViewbox // get the original viewbox before animation
+- el.getNewPanString() // as above but as string ?
+- el.getOriginalViewbox() // get the original viewbox before animation
+- el.getCurrentScale() // returns just x, so needs modification if x,y scale different
+- el.getNewScale() // get new scale to be applied
+- el.storeNewScale( scale ) // store a new scale which will be applied when updateTransform
+- el.storeNewRotate( angle ) // store a new rotation to be applied later
+- el.getCurrentRotation() // get existing rotation
+- el.getStartRotation() // get starting rotation
+- el.resetNewTransforms() // reset transforms that would be applied
+- el.addTransform() // add a transform (doesn't overwrite I think)
+- el.createNewViewbox() // create a new viewbox from a new pan set
 
-- el.pinchmove( event ) // pinchmove an element
+- el.updateTransform() // updates transforms that have all just been applied above
+
+- el.pinchmove( event ) // pinchmove an element...worked with Hammer.js I think ?
+
+- el.getViewBoxInfo // get viewbox info (even if not set)
+
 
 - el.animateFunc( from, to, func, timer, easing, callback ) // animation func that ties into other stuff here, need to doc how this slightly varies from Snaps animate 
 - el.animateSvgFocus( duration, easing, callback ) // animate/highlight the Svg/paper element
