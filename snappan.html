@@ -20,11 +20,14 @@
 
 var paper = Snap("#mySvg");
 
+var textSize = { fontSize: 8 };
+
 var r1 = paper.rect(430,30,50,50,10,10).attr({ fill: 'blue' });
-var t = paper.text(430,20,'click to focus on square').attr({ fontSize: 6 });
+var t = paper.text(430,20,'click to focus on square').attr( textSize);
 
 var r2 = paper.rect(30,100,50,50,10,10).attr({ fill: 'red' });
-var t2 = paper.text(30,90,"click to focus on tux").attr({ fontSize: 6 });
+var t2 = paper.text(30,90,"click to focus on tux").attr( textSize );
+var t3 = paper.text(10,10,"zoom/pan/rotate/pinchzoom tux").attr( textSize );
 
 
 var r = paper.rect(0,0,20,20);
