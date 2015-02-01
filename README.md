@@ -67,6 +67,8 @@ c.animateFrames([
 - el.addTransform() // add a transform (doesn't overwrite I think)
 - el.createNewViewbox() // create a new viewbox from a new pan set
 
+- el.storeInitialTransform() // store existing transform so we keep this when doing a new transform (so relative, not reset)
+
 - el.updateTransform() // updates transforms that have all just been applied above
 
 - el.pinchmove( event ) // pinchmove an element...worked with Hammer.js I think ?
