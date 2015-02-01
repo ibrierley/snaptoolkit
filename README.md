@@ -46,9 +46,9 @@ c.animateFrames([
 - el.handleScroll( ev ) // handle scrolling
 
 - el.scaleBy( factor ) // scale by an amount
-- el.scaleInc( factor ) // Incrementally rotate by a factor
+- el.scaleInc( factor ) // Incrementally rotate (be wary in animation would increase by factor every time)
 - el.rotateBy( angle ) // rotate by angl
-- el.rotateInc( angle ) // incrementally rotate by angle
+- el.rotateInc( angle ) // incrementally rotate by angle (in animation will inc every interval)
 - el.panBy( x, y ) // pan by amount
 - el.panInc( x, y ) // incrementally pan by amount
 - el.resetStates() // resets transforms for above
@@ -66,6 +66,8 @@ c.animateFrames([
 - el.resetNewTransforms() // reset transforms that would be applied
 - el.addTransform() // add a transform (doesn't overwrite I think)
 - el.createNewViewbox() // create a new viewbox from a new pan set
+
+- el.storeInitialTransform() // store existing transform so we keep this when doing a new transform (so relative, not reset)
 
 - el.updateTransform() // updates transforms that have all just been applied above
 
