@@ -19,13 +19,13 @@ Ideas include...
 ## Methods
 
 - el.animateFrames( arrayOfAnimations ) // sequences of animations in order, using callbacks after each
--    frame consists of
--    el: element to animate
--    animation: the animation, eg { transform: 't20,20' }
--    dur: duration
--    easing: easing (snap easings)
--    startFunc: function to call on the start of the next frame
--    You could probably put a null animation in to fake a pause and endFunc
+   frame consists of
+    el: element to animate
+    animation: the animation, eg { transform: 't20,20' }
+    dur: duration
+    easing: easing (snap easings)
+    startFunc: function to call on the start of the next frame
+    You could probably put a null animation in to fake a pause and endFunc
 ```
 c.animateFrames([
     { el: c,      animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce },
