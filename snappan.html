@@ -29,6 +29,8 @@ var r2 = paper.rect(30,100,50,50,10,10).attr({ fill: 'red' });
 var t2 = paper.text(30,90,"click to focus on tux").attr( textSize );
 var t3 = paper.text(10,10,"zoom/pan/rotate/pinchzoom tux").attr( textSize );
 
+var r3 = paper.rect(430,180,50,50,10,10).attr({ fill: 'purple' });
+var t4 = paper.text(410,170,'click to sequence animation').attr( textSize);
 
 var r = paper.rect(0,0,20,20);
 
@@ -47,7 +49,7 @@ r.markupAnimate( { attributeName: "opacity", from: "1", to: "0", dur: "5s", repe
 
 
 var g = paper.g();
-var myImage = paper.image('Dreaming_Tux.svg',-20,-40,400,400);
+var myImage = paper.image('Dreaming_Tux.svg',-20,-40,400,400).transform('s0.2');
 
 g.add(myImage);
 
@@ -56,11 +58,13 @@ paper.add(r2);
 
 myImage.ftCreateHandles();
 
+
 r1.click( rectFocus );
 r2.click( function() { 
-	console.log('clicked on r2');
+	console.log('clicked on r2', myImage);
 	myImage.animateSvgFocus( 2000, mina.linear ) 
 } );
+r3.click( animateScale );
 
 function rectFocus() {
         r1.animateSvgFocus( 2000, mina.linear, imageFocus);
@@ -78,12 +82,14 @@ function rect2Focus() {
 };
 
 function animateScale() {
+	g.storeInitialTransform();
 	Snap.animate(1,2, function( val ) {
-		g.scaleBy( val )
-	}, 2000, mina.linear );
+		g.scaleBy( val );
+	}, 2000, mina.linear, animateRotate);
 };
 
 function animateRotate() {
+	g.storeInitialTransform();
 	Snap.animate(0,90, function( val ) {
                 g.rotateBy( val );
         }, 2000, mina.linear );
