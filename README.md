@@ -19,11 +19,18 @@ Ideas include...
 ## Methods
 
 - el.animateFrames( arrayOfAnimations ) // sequences of animations in order, using callbacks after each
+-    frame consists of
+-    el: element to animate
+-    animation: the animation, eg { transform: 't20,20' }
+-    dur: duration
+-    easing: easing (snap easings)
+-    startFunc: function to call on the start of the next frame
+-    You could probably put a null animation in to fake a pause and endFunc
 ```
 c.animateFrames([
-    { animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce },
-    { animation: { transform: 't50,500' },                dur: 1000, easing: mina.bounce },
-    { animation: { transform: 's1.2,1.2,300,300t200,-100' },dur: 1000, easing: mina.bounce }
+    { el: c,      animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce },
+    { el: c,      animation: { transform: 't50,500' },                dur: 1000, easing: mina.bounce },
+    { el: myRect, animation: { transform: 's1.2,1.2,300,300t200,-100' },dur: 1000, easing: mina.bounce, startFunc: myFunc }
 ]);
 ```
 
