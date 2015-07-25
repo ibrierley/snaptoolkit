@@ -331,12 +331,42 @@ Snap.plugin( function( Snap, Element, Paper, global ) {
 		return this.ftSetHandle( handles );  
         };
 
-	Element.prototype.getTransformedBB = function() {
+	// check this on nested transform containers
+	Element.prototype.getTransformedBB = function( outerSvgOption ) {	//whi
 		var bb = this.getBBox(1);
-		var t = this.node.getTransformToElement( this.paper.node );//.inverse();
+		var t = this.node.getTransformToElement( outerSvgOption ? this.node.farthestViewportElement : this.paper.node );//.inverse();
 		var m = Snap.matrix( t );
 		return { x: m.x( bb.cx, bb.cy ), y: m.y( bb.cx, bb.cy ) };
 	};
+
+	// updated alternative to above,see Phrogz SO post which looks more consistent for nested transforms
+	Element.prototype.transformedBoundingBox = function( viewPortOption ){
+                var bb  = this.node.getBBox(),
+
+                svg = this.node.ownerSVGElement,
+                m   = this.node.getTransformToElement(viewPortOption ? this.node.farthestViewportElement : this.node.parentNode);
+                var pts = [     svg.createSVGPoint(), svg.createSVGPoint(), svg.createSVGPoint(), svg.createSVGPoint() ];
+                pts[0].x=bb.x;          pts[0].y=bb.y;
+                pts[1].x=bb.x+bb.width; pts[1].y=bb.y;
+                pts[2].x=bb.x+bb.width; pts[2].y=bb.y+bb.height;
+                pts[3].x=bb.x;          pts[3].y=bb.y+bb.height;
+
+                // Transform each into the space of the parent,
+                // and calculate the min/max points from that.    
+                var xMin=Infinity,xMax=-Infinity,yMin=Infinity,yMax=-Infinity;
+                pts.forEach(function(pt){
+                        pt = pt.matrixTransform(m);
+                        xMin = Math.min(xMin,pt.x);
+                        xMax = Math.max(xMax,pt.x);
+                        yMin = Math.min(yMin,pt.y);
+                        yMax = Math.max(yMax,pt.y);
+                });
+
+                bb.x = xMin; bb.width  = xMax-xMin;
+                bb.y = yMin; bb.height = yMax-yMin;
+                return bb;
+        }
+
 
 	Element.prototype.ftUpdateHandlePosition = function() {
 		var dx, dy; 
@@ -413,17 +443,19 @@ Snap.plugin( function( Snap, Element, Paper, global ) {
 		return this.parent().selectAll('.handle');	// will it always be parent ????
 	};
 
-	Element.prototype.highlightBBox = function() {
-		var bb = this.getBBox();
+	Element.prototype.highlightBBox = function() {	// need to fix for transformed element, eg by scaleBy animation it doesn't change
+		var bb = this.getBBox(0);
 		this.data('hbb') && this.data('hbb').remove();
-		var tbb = this.getTransformedBB();
-		var rect = this.paper.rect(tbb.x - bb.width/2, tbb.y - bb.height/2, bb.width, bb.height ).attr({ fill: 'none', stroke: 'black', strokeWidth: 4, opacity: 0.1, strokeDasharray:  '5,5' })
-		this.data('hbb', rect);
-		return rect;
+		//var tbb = this.getTransformedBB(1);	// possibly superceded, may want to replace elsewhere as well
+		var hbb =this.transformedBoundingBox(1);
+		var bbr = this.paper.rect(hbb.x, hbb.y, hbb.width, hbb.height ).attr({ fill: 'none', stroke: 'green', strokeWidth: 4, opacity: 0.3, strokeDasharray:  '5,5' })
+		//var rect = this.paper.rect(tbb.x - bb.width/2, tbb.y - bb.height/2, bb.width, bb.height ).attr({ fill: 'none', stroke: 'black', strokeWidth: 4, opacity: 0.1, strokeDasharray:  '5,5' })
+		this.data('hbb', bbr);
+		return bbr;
 	};
 
 
-	// create svg animation markup proper (standalone)
+	// create svg animation SMIL markup (standalone)
 
 	function setDefaults( attrs, defaults ) {
 		for( var k in defaults ) { 
@@ -480,17 +512,23 @@ Snap.plugin( function( Snap, Element, Paper, global ) {
 		return this.append( this.paper.markupAnimate( attr ) );
 	};
 
-	function nextFrame ( el, frameArray,  whichFrame ) {
+	function nextFrame ( frameArray,  whichFrame ) {
    		if( whichFrame >= frameArray.length ) { return }
-    		el.animate( frameArray[ whichFrame ].animation, 
-                frameArray[ whichFrame ].dur, 
-                frameArray[ whichFrame ].easing, 
-                nextFrame.bind( null, el, frameArray, whichFrame + 1 ) );
+
+		if( typeof frameArray[ whichFrame ].startFunc === 'function' ) { 
+			frameArray[ whichFrame ].startFunc.call(frameArray[ whichFrame ].el) 
+		};
+
+    		frameArray[ whichFrame ].el.animate( 	
+				frameArray[ whichFrame ].animation, 
+                		frameArray[ whichFrame ].dur, 
+                		frameArray[ whichFrame ].easing, 
+                		nextFrame.bind( null, frameArray, whichFrame + 1 ) );
 	};
 
 
 	Element.prototype.animateFrames = function( animFrames ) {
-		nextFrame( this, animFrames, 0 );
+		nextFrame( animFrames, 0 );
 	};	
 
 });
