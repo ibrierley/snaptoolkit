@@ -1,3 +1,7 @@
+//Polyfill for modern browser
+SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
+    return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
+};
 
 Snap.plugin( function( Snap, Element, Paper, global ) {
 
@@ -86,8 +90,8 @@ Snap.plugin( function( Snap, Element, Paper, global ) {
 
 	Element.prototype.getEventPoint = function( ev ) {		// combine these two somehow, different events depending on where its from
 		var pt = this.createPoint();
-		pt.x = ev.srcEvent ? ev.srcEvent.clientX : ( ev.clientX || ev.center.x );
-		pt.y = ev.srcEvent ? ev.srcEvent.clientY : ( ev.clientY || ev.center.y );
+		pt.x = ev.srcEvent.clientX ? ev.srcEvent.clientX : ( ev.clientX || ev.center.x );
+		pt.y = ev.srcEvent.clientY ? ev.srcEvent.clientY : ( ev.clientY || ev.center.y );
 		return pt.matrixTransform( this.paper.node.getScreenCTM().inverse() );
 	};
  
