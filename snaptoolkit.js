@@ -90,8 +90,13 @@ Snap.plugin( function( Snap, Element, Paper, global ) {
 
 	Element.prototype.getEventPoint = function( ev ) {		// combine these two somehow, different events depending on where its from
 		var pt = this.createPoint();
-		pt.x = ev.srcEvent.clientX ? ev.srcEvent.clientX : ( ev.clientX || ev.center.x );
-		pt.y = ev.srcEvent.clientY ? ev.srcEvent.clientY : ( ev.clientY || ev.center.y );
+		if( ev.srcEvent ) {					// test on mouse and touch devices
+			pt.x = ev.center.x || ev.srcEvent.clientX;
+			pt.y = ev.center.y || ev.srcEvent.clientY;
+		} else {						
+			pt.x = ev.clientX || ev.center.x;
+			pt.y = ev.clientY || ev.center.y;
+		}
 		return pt.matrixTransform( this.paper.node.getScreenCTM().inverse() );
 	};
  
