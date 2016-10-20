@@ -26,7 +26,7 @@ var r1 = paper.rect(430,30,50,50,10,10).attr({ fill: 'blue' });
 var t = paper.text(430,20,'click to focus on square').attr( textSize);
 
 var r2 = paper.rect(30,100,50,50,10,10).attr({ fill: 'red' });
-var t2 = paper.text(30,90,"click to focus on tux").attr( textSize );
+var t2 = paper.text(30,90,"click to focus on svg paper from tux").attr( textSize );
 var t3 = paper.text(10,10,"zoom/pan/rotate/pinchzoom tux").attr( textSize );
 
 var r3 = paper.rect(430,180,50,50,10,10).attr({ fill: 'purple' });
@@ -37,9 +37,9 @@ var r = paper.rect(0,0,20,20);
 var c = paper.circle(20,20,50).attr({ fill: 'green' });
 
 c.animateFrames([
-    { animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce },
-    { animation: { transform: 't50,500' },                dur: 1000, easing: mina.bounce },
-    { animation: { transform: 's1.2,1.2,300,300t200,-100' },dur: 1000, easing: mina.bounce }
+    { el: c, animation: { transform: 's0.4,0.4,400,100' },         dur: 1000, easing: mina.bounce, startFunc: function() { alert('Starting animation function') }  },
+    { el: c, animation: { transform: 't50,500' },                  dur: 1000, easing: mina.bounce, startFunc: function() { alert('Second Animation function' ) }  },
+    { el: c, animation: { transform: 's1.2,1.2,300,300t200,-100' },dur: 1000, easing: mina.bounce }
 ]); 
 
 var mpath = paper.markupMpath({ "xlink:href": "#path1" });
@@ -112,6 +112,9 @@ function animatePan() {
 }
 
 myImage.addMouseWheelHandler();
+
+var myRects = Snap.selectAll('rect');
+myRects.forEach(function(el) { el.addMouseWheelHandler() });
 
 var mc = new Hammer( myImage.node, {} );
 var pinch = new Hammer.Pinch();
